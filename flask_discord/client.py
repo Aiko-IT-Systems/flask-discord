@@ -229,3 +229,20 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
             pass
 
         return models.Guild.fetch_from_api()
+
+    @staticmethod
+    def fetch_guild_member(guild_id) -> models.GuildMember:
+        """This method returns guild member object from the internal cache if it exists otherwise makes an API call
+        to do so.
+
+        Returns
+        -------
+        flask_discord.models.GuildMember
+
+        """
+        user = models.User.get_from_cache()
+        try:
+            return user.guild_members[guild_id]
+        except AttributeError:
+            pass
+        return models.GuildMember.fetch_from_api()
