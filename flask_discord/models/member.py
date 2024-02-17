@@ -1,5 +1,3 @@
-from flask_discord.models import User
-
 from .base import DiscordModelsBase
 from flask import current_app
 
@@ -46,7 +44,7 @@ class GuildMember(DiscordModelsBase):
     permissions : str
         Total permissions of the member in the channel, including overwrites, returned when in the interaction object.
     communication_disabled_until : str
-        ISO8601 timestamp when the user's timeout will expire and the user will be able to communicate in the guild again,
+        ISO8601 timestamp when the timeout will expire and the user will be able to communicate in the guild again.
 
     """
     MANY = False
@@ -55,7 +53,7 @@ class GuildMember(DiscordModelsBase):
     def __init__(self, payload, guild_id):
         super().__init__(payload, guild_id=guild_id)
         self.id = int(self._payload["id"])
-        self.user: User = self._payload.get("user")
+        self.user = self._payload.get("user")
         self.nick = self._payload.get("nick", None)
         self.avatar_hash = self._payload.get("avatar", None)
         self.roles = self._payload.get("roles")
@@ -76,7 +74,7 @@ class GuildMember(DiscordModelsBase):
         return types.Permissions(int(permissions_value))
 
     def __str__(self):
-        return self.nick or self.user.__str__()
+        return self.nick or self.user.get("global_name") or self.user.get("username")
 
     def __eq__(self, member):
         return isinstance(member, GuildMember) and member.id == self.id
@@ -92,7 +90,7 @@ class GuildMember(DiscordModelsBase):
         image_format = configs.DISCORD_ANIMATED_IMAGE_FORMAT \
             if self.is_avatar_animated else configs.DISCORD_IMAGE_FORMAT
         return configs.DISCORD_GUILD_MEMBER_AVATAR_BASE_URL.format(
-            guild_id=self._guild_id,user_id=self.id, avatar_hash=self.avatar_hash, format=image_format)
+            guild_id=self._guild_id, user_id=self.id, avatar_hash=self.avatar_hash, format=image_format)
 
     @property
     def is_avatar_animated(self):
@@ -104,9 +102,9 @@ class GuildMember(DiscordModelsBase):
 
     @classmethod
     def fetch_from_api(cls, guild_id=0, cache=True):
-        """A class method which returns an instance or list of instances of this model by implicitly making an
-        API call to Discord. If an instance of :py:class:`flask_discord.User` exists in the users internal cache
-        who belongs to these guild members then, the cached property :py:attr:`flask_discord.User.guild_members` is updated.
+        """A class method which returns an instance or list of instances of this model by implicitly making an API
+        call to Discord. If an instance of :py:class:`flask_discord.User` exists in the users internal cache who
+        belongs to these guild members then, the cached property :py:attr:`flask_discord.User.guild_members` is updated.
 
         Parameters
         ----------
