@@ -49,7 +49,7 @@ class GuildMember(DiscordModelsBase):
         ISO8601 timestamp when the user's timeout will expire and the user will be able to communicate in the guild again,
 
     """
-    MANY = True
+    MANY = False
     ROUTE = "/users/@me/guilds/{guild_id}/member"
 
     def __init__(self, payload, guild_id):
@@ -103,13 +103,15 @@ class GuildMember(DiscordModelsBase):
             return False
 
     @classmethod
-    def fetch_from_api(cls, cache=True):
+    def fetch_from_api(cls, guild_id=0, cache=True):
         """A class method which returns an instance or list of instances of this model by implicitly making an
         API call to Discord. If an instance of :py:class:`flask_discord.User` exists in the users internal cache
         who belongs to these guild members then, the cached property :py:attr:`flask_discord.User.guild_members` is updated.
 
         Parameters
         ----------
+        guild_id : int
+            ID of the guild.
         cache : bool
             Determines if the :py:attr:`flask_discord.User.guild_members` cache should be updated with the new member.
 

@@ -1,6 +1,7 @@
 from .. import configs
 
 from .guild import Guild
+from .member import GuildMember
 from .. import exceptions
 from .base import DiscordModelsBase
 from .connections import UserConnection
@@ -77,7 +78,7 @@ class User(DiscordModelsBase):
 
         # Few properties which are intended to be cached.
         self._guilds = None         # Mapping of guild ID to flask_discord.models.Guild(...).
-        self._guild_members = None  # Mapping of guild ID to flask_discord.models.GuildMember(...).
+        self.guild_members = None  # Mapping of guild ID to flask_discord.models.GuildMember(...).
         self.connections = None     # List of flask_discord.models.UserConnection(...).
 
     @property
@@ -99,13 +100,13 @@ class User(DiscordModelsBase):
     def guild_members(self):
         """A property returning list of :py:class:`flask_discord.GuildMember` instances of the user."""
         try:
-            return list(self._guild_members.values())
+            return list(self.guild_members.values())
         except AttributeError:
             pass
 
     @guild_members.setter
     def guild_members(self, value):
-        self._guild_members[value.guild_id] = value
+        self.guild_members[value.guild_id] = value
 
     def __str__(self):
         if self.is_migrated and self.global_name:
@@ -150,18 +151,17 @@ class User(DiscordModelsBase):
             return False
 
     @classmethod
-    def fetch_from_api(cls, guilds=False, connections=False):
+    def fetch_from_api(cls, guilds=False, connections=False, members=False):
         """A class method which returns an instance of this model by implicitly making an
         API call to Discord. The user returned from API will always be cached and update in internal cache.
 
-        Parameters
-        ----------
-        guilds : bool
-            A boolean indicating if user's guilds should be cached or not. Defaults to ``False``. If chose to not
-            cache, user's guilds can always be obtained from :py:func:`flask_discord.Guilds.fetch_from_api()`.
-        connections : bool
-            A boolean indicating if user's connections should be cached or not. Defaults to ``False``. If chose to not
-            cache, user's connections can always be obtained from :py:func:`flask_discord.Connections.fetch_from_api()`.
+        Parameters ---------- guilds : bool A boolean indicating if user's guilds should be cached or not. Defaults
+        to ``False``. If chose to not cache, user's guilds can always be obtained from
+        :py:func:`flask_discord.Guilds.fetch_from_api()`. connections : bool A boolean indicating if user's
+        connections should be cached or not. Defaults to ``False``. If chose to not cache, user's connections can
+        always be obtained from :py:func:`flask_discord.Connections.fetch_from_api()`. members : bool A boolean
+        indicating if user's guild members should be cached or not. Defaults to ``False``. If chose to not cache,
+        user's guild members can always be obtained from :py:func:`flask_discord.GuildMember.fetch_from_api(guild_id)`.
 
         Returns
         -------
@@ -177,6 +177,9 @@ class User(DiscordModelsBase):
             self.fetch_guilds()
         if connections:
             self.fetch_connections()
+        if guilds and members:
+            for guild in self.guilds:
+                self.fetch_guild_members(guild.id)
 
         return self
 
@@ -244,6 +247,38 @@ class User(DiscordModelsBase):
         """
         self.connections = UserConnection.fetch_from_api(cache=False)
         return self.connections
+
+    def fetch_guild_member(self, guild_id) -> GuildMember:
+        """A method which makes an API call to Discord to get user's guild member.
+        It returns the guild member object for the guild the user is member of.
+
+        Parameters
+        ----------
+        guild_id : int
+            The ID of the guild you want to get the member from.
+
+        Returns
+        -------
+        flask_discord.GuildMember
+            An instance of :py:class:`flask_discord.GuildMember` for given guild_id.
+
+        """
+        self.guild_members = GuildMember.fetch_from_api(guild_id, cache=False)
+        return self.guild_members[guild_id]
+
+    def fetch_guild_members(self) -> list:
+        """A method which makes an API call to Discord to get user's guild members. It prepares the internal guild
+        members cache and returns list of all guild member object for all guilds the user is member of.
+
+        Returns
+        -------
+        list
+            List of :py:class:`flask_discord.GuildMember` instances.
+
+        """
+        for guild in self.guilds:
+            self.guild_members = GuildMember.fetch_from_api(guild.id, cache=False)
+        return self.guild_members
 
 
 class Bot(User):
