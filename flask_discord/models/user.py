@@ -78,7 +78,7 @@ class User(DiscordModelsBase):
 
         # Few properties which are intended to be cached.
         self._guilds = None         # Mapping of guild ID to flask_discord.models.Guild(...).
-        self.guild_members = None  # Mapping of guild ID to flask_discord.models.GuildMember(...).
+        self._guild_members = None  # Mapping of guild ID to flask_discord.models.GuildMember(...).
         self.connections = None     # List of flask_discord.models.UserConnection(...).
 
     @property
@@ -100,13 +100,13 @@ class User(DiscordModelsBase):
     def guild_members(self):
         """A property returning list of :py:class:`flask_discord.GuildMember` instances of the user."""
         try:
-            return list(self.guild_members.values())
+            return list(self._guild_members.values())
         except AttributeError:
             pass
 
     @guild_members.setter
     def guild_members(self, value):
-        self.guild_members[value.guild_id] = value
+        self._guild_members[value.guild_id] = value
 
     def __str__(self):
         if self.is_migrated and self.global_name:
