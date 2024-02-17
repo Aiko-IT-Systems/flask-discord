@@ -24,6 +24,10 @@ Models
     :members:
     :inherited-members:
 
+.. autoclass:: flask_discord.models.GuildMember
+    :members:
+    :inherited-members:
+
 .. autoclass:: flask_discord.models.User
     :members:
     :inherited-members:

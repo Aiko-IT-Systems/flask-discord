@@ -39,12 +39,12 @@ extra_requirements = {
 
 
 setup(
-    name='Flask-Discord',
+    name='flask-discord',
     version=__get_version(),
-    url='https://github.com/thec0sm0s/Flask-Discord',
+    url='https://github.com/Aiko-IT-Systems/flask-discord',
     license='MIT',
-    author='□ | The Cosmos',
-    author_email='deepakrajko14@gmail.com',
+    author='Lala Sabathil',
+    author_email='aiko@aitsys.dev',
     description='Discord OAuth2 extension for Flask.',
     long_description=__doc__,
     packages=find_packages(),

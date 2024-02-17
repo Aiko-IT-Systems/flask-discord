@@ -19,9 +19,9 @@ sys.path.append('../flask_discord/')
 
 # -- Project information -----------------------------------------------------
 
-project = 'Flask-Discord'
-copyright = '2019, □ | The Cosmos'
-author = '□ | The Cosmos'
+project = 'Flaskfdiscord'
+copyright = '2024 Aiko IT Systems'
+author = 'Lala Sabathil'
 
 with open('../flask_discord/__init__.py') as f:
     ver = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)

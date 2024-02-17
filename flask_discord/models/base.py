@@ -18,8 +18,9 @@ class DiscordModelsBase(metaclass=DiscordModelsMeta):
     MANY = False
 
     @abstractmethod
-    def __init__(self, payload):
+    def __init__(self, payload, guild_id=None):
         self._payload = payload
+        self._guild_id = guild_id
 
     @staticmethod
     def _request(*args, **kwargs):

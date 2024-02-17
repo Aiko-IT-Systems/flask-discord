@@ -67,7 +67,7 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         ----------
         scope : list, optional
             An optional list of valid `Discord OAuth2 Scopes
-            <https://discordapp.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes>`_.
+            <https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes>`_.
         data : dict, optional
             A mapping of your any custom data which you want to access after authorization grant. Use
             `:py:meth:flask_discord.DiscordOAuth2Session.callback` to retrieve this data in your callback view.

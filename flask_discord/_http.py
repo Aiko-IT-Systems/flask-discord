@@ -107,7 +107,7 @@ class DiscordOAuth2HttpClient(abc.ABC):
             The state to use for OAuth2 session.
         scope : list, optional
             List of valid `Discord OAuth2 Scopes
-            <https://discordapp.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes>`_.
+            <https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes>`_.
 
         Returns
         -------

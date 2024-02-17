@@ -29,6 +29,10 @@ class User(DiscordModelsBase):
         The discord username of the user.
     discriminator : str
         4 length string representing discord tag of the user.
+    is_migrated : bool
+        A boolean representing if the user has migrated to the new username system.
+    global_name : str
+        The global name of the user.
     avatar_hash : str
         Hash of users avatar.
     bot : bool
@@ -43,10 +47,10 @@ class User(DiscordModelsBase):
         User's email ID.
     flags : int
         An integer representing the
-        `user flags <https://discordapp.com/developers/docs/resources/user#user-object-user-flags>`_.
+        `user flags <https://discord.com/developers/docs/resources/user#user-object-user-flags>`_.
     premium_type : int
         An integer representing the
-        `type of nitro subscription <https://discordapp.com/developers/docs/resources/user#user-object-premium-types>`_.
+        `type of nitro subscription <https://discord.com/developers/docs/resources/user#user-object-premium-types>`_.
     connections : list
         A list of :py:class:`flask_discord.UserConnection` instances. These are cached and this list might be empty.
 
@@ -67,9 +71,13 @@ class User(DiscordModelsBase):
         self.email = self._payload.get("email")
         self.flags = self._payload.get("flags")
         self.premium_type = self._payload.get("premium_type")
+        self.is_migrated = self._payload.get("discriminator") == "0"
+        self.global_name = (self._payload.get("global_name", None)
+                            or self._payload.get("username")) if self.is_migrated else None
 
         # Few properties which are intended to be cached.
         self._guilds = None         # Mapping of guild ID to flask_discord.models.Guild(...).
+        self._guild_members = None  # Mapping of guild ID to flask_discord.models.GuildMember(...).
         self.connections = None     # List of flask_discord.models.UserConnection(...).
 
     @property
@@ -87,8 +95,25 @@ class User(DiscordModelsBase):
     def guilds(self, value):
         self._guilds = value
 
+    @property
+    def guild_members(self):
+        """A property returning list of :py:class:`flask_discord.GuildMember` instances of the user."""
+        try:
+            return list(self._guild_members.values())
+        except AttributeError:
+            pass
+
+    @guild_members.setter
+    def guild_members(self, value):
+        self._guild_members[value.guild_id] = value
+
     def __str__(self):
-        return f"{self.name}#{self.discriminator}"
+        if self.is_migrated and self.global_name:
+            return f"{self.global_name} (@{self.name})"
+        elif self.is_migrated:
+            return f"@{self.name}"
+        else:
+            return f"{self.name}#{self.discriminator}"
 
     def __eq__(self, user):
         return isinstance(user, User) and user.id == self.id
@@ -105,7 +130,7 @@ class User(DiscordModelsBase):
     def avatar_url(self):
         """A property returning direct URL to user's avatar."""
         if not self.avatar_hash:
-            return
+            return self.default_avatar_url
         image_format = configs.DISCORD_ANIMATED_IMAGE_FORMAT \
             if self.is_avatar_animated else configs.DISCORD_IMAGE_FORMAT
         return configs.DISCORD_USER_AVATAR_BASE_URL.format(
@@ -114,7 +139,7 @@ class User(DiscordModelsBase):
     @property
     def default_avatar_url(self):
         """A property which returns the default avatar URL as when user doesn't has any avatar set."""
-        return configs.DISCORD_DEFAULT_USER_AVATAR_BASE_URL.format(modulo5=int(self.discriminator) % 5)
+        return configs.DISCORD_DEFAULT_USER_AVATAR_BASE_URL.format((self.id >> 22) % 6)
 
     @property
     def is_avatar_animated(self):

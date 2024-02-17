@@ -1,4 +1,4 @@
-DISCORD_API_BASE_URL = "https://discordapp.com/api"
+DISCORD_API_BASE_URL = "https://discord.com/api"
 
 DISCORD_AUTHORIZATION_BASE_URL = DISCORD_API_BASE_URL + "/oauth2/authorize"
 DISCORD_TOKEN_URL = DISCORD_API_BASE_URL + "/oauth2/token"
@@ -26,5 +26,7 @@ DISCORD_ANIMATED_IMAGE_FORMAT = "gif"
 DISCORD_USER_AVATAR_BASE_URL = DISCORD_IMAGE_BASE_URL + "avatars/{user_id}/{avatar_hash}.{format}"
 DISCORD_DEFAULT_USER_AVATAR_BASE_URL = DISCORD_EMBED_BASE_BASE_URL + "embed/avatars/{modulo5}.png"
 DISCORD_GUILD_ICON_BASE_URL = DISCORD_IMAGE_BASE_URL + "icons/{guild_id}/{icon_hash}.png"
+DISCORD_GUILD_MEMBER_AVATAR_BASE_URL = DISCORD_IMAGE_BASE_URL + ("guilds/{guild_id}/users/{user_id}/avatars/{"
+                                                                 "avatar_hash}.{format}")
 
 DISCORD_USERS_CACHE_DEFAULT_MAX_LIMIT = 100

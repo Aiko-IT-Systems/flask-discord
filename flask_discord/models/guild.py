@@ -42,6 +42,9 @@ class Guild(DiscordModelsBase):
         self.icon_hash = self._payload.get("icon")
         self.is_owner = self._payload.get("owner")
         self.permissions = self.__get_permissions(self._payload.get("permissions"))
+        self.approximate_member_count = self._payload.get("approximate_member_count")
+        self.approximate_presence_count = self._payload.get("approximate_presence_count")
+        self.features = self._payload.get("features")
 
     @staticmethod
     def __get_permissions(permissions_value):

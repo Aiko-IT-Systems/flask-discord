@@ -28,8 +28,10 @@ class UserConnection(DiscordModelsBase):
         be shown in presence updates.
     visibility : int
         An integer representing
-        `visibility <https://discordapp.com/developers/docs/resources/user#user-object-visibility-types>`_
+        `visibility <https://discord.com/developers/docs/resources/user#user-object-visibility-types>`_
         of this connection.
+    two_way_link : bool
+        A boolean representing if this connection has a corresponding third party OAuth2 token.
 
     """
 
@@ -47,6 +49,7 @@ class UserConnection(DiscordModelsBase):
         self.friend_sync = self._payload.get("friend_sync")
         self.show_activity = self._payload.get("show_activity")
         self.visibility = self._payload.get("visibility")
+        self.two_way_link = self._payload.get("two_way_link")
 
     def __get_integrations(self):
         return [Integration(payload) for payload in self._payload.get("integrations", list())]

@@ -21,9 +21,20 @@ class Integration(object):
         An integer representing the grace period before expiring subscribers.
     account : dict
         A dictionary representing raw
-        `account <https://discordapp.com/developers/docs/resources/guild#integration-account-object>`_ object.
+        `account <https://discord.com/developers/docs/resources/guild#integration-account-object>`_ object.
     synced_at : ISO8601 timestamp
         Representing when this integration was last synced.
+    enable_emoticons : bool
+        A boolean representing if emoticons should be synced for this integration (twitch only currently)
+    subscriber_count : int
+        Number of subscribers.
+    revoked : bool
+        A boolean representing if this integration is revoked.
+    application : dict
+        A dictionary representing raw
+        `application <https://discord.com/developers/docs/resources/application>`_ object.
+    scopes : str
+        The bot's OAuth2 scopes.
 
     """
 
@@ -40,3 +51,9 @@ class Integration(object):
         # self.user = User(self._payload.get("user", dict()))
         self.account = self._payload.get("account")
         self.synced_at = self._payload.get("synced_at")
+        self.enable_emoticons = self._payload.get("enable_emoticons", False)
+        self.subscriber_count = self._payload.get("subscriber_count", None)
+        self.revoked = self._payload.get("revoked", False)
+        self.application = self._payload.get("application")
+        self.scopes = self._payload.get("scopes")
+
