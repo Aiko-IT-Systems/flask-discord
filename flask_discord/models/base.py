@@ -36,7 +36,7 @@ class DiscordModelsBase(metaclass=DiscordModelsMeta):
         return current_app.discord.bot_request(*args, **kwargs)
 
     @classmethod
-    def fetch_from_api(cls, guild_id=None):
+    def fetch_from_api(cls, guild_id=0):
         """A class method which returns an instance or list of instances of this model by implicitly making an
         API call to Discord.
 
@@ -50,11 +50,13 @@ class DiscordModelsBase(metaclass=DiscordModelsMeta):
         """
         request_method = cls._bot_request if cls.BOT else cls._request
         payload = request_method(cls.ROUTE)
-        if cls.MANY:
-            return [cls(_) for _ in payload]
-        if not guild_id:
+
+        if guild_id is 0:
+            if cls.MANY:
+                return [cls(_) for _ in payload]
             return cls(payload)
         else:
+            current_app.logger.warning(payload)
             return cls(payload, guild_id)
 
     def to_json(self):

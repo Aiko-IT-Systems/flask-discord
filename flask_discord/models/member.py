@@ -19,8 +19,6 @@ class GuildMember(DiscordModelsBase):
 
     Attributes
     ----------
-    id : int
-        Discord ID of the guild.
     user : dict
         User object of the guild member.
     nick : str
@@ -45,6 +43,8 @@ class GuildMember(DiscordModelsBase):
         Total permissions of the member in the channel, including overwrites, returned when in the interaction object.
     communication_disabled_until : str
         ISO8601 timestamp when the timeout will expire and the user will be able to communicate in the guild again.
+    guild_id : int
+        ID of the guild to which this member belongs.
 
     """
     MANY = False
@@ -65,6 +65,7 @@ class GuildMember(DiscordModelsBase):
         self.permissions = self._payload.get("permissions", 0)
         self.communication_disabled_until = self._payload.get("communication_disabled_until", None)
         self.guild_id = guild_id
+        self.id = self.user.get("id")
 
     @staticmethod
     def __get_permissions(permissions_value):
