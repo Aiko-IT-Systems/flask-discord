@@ -270,7 +270,7 @@ class User(DiscordModelsBase):
         self.guild_members = GuildMember.fetch_from_api(guild_id, cache=True)
         return self.guild_members[guild_id]
 
-    def fetch_guild_members(self) -> dict[int, GuildMember]
+    def fetch_guild_members(self) -> dict[int, GuildMember]:
         """A method which makes an API call to Discord to get user's guild members. It prepares the internal guild
         members cache and returns list of all guild member object for all guilds the user is member of.
 
