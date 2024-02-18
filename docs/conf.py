@@ -19,7 +19,7 @@ sys.path.append('../flask_discord/')
 
 # -- Project information -----------------------------------------------------
 
-project = 'Flaskfdiscord'
+project = 'flask-discord'
 copyright = '2024 Aiko IT Systems'
 author = 'Lala Sabathil'
 
