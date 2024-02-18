@@ -7,6 +7,7 @@ DISCORD_TOKEN_URL = DISCORD_API_BASE_URL + "/oauth2/token"
 DISCORD_OAUTH_ALL_SCOPES = [
     "bot", "connections", "email", "identify", "guilds", "guilds.join",
     "gdm.join", "messages.read", "rpc", "rpc.api", "rpc.notifications.read", "webhook.incoming",
+    "applications.commands", "role_connections.write", "guilds.members.read"
 ]
 
 DISCORD_OAUTH_DEFAULT_SCOPES = [
@@ -15,7 +16,7 @@ DISCORD_OAUTH_DEFAULT_SCOPES = [
 
 
 DISCORD_PASSTHROUGH_SCOPES = [
-    "bot", "webhook.incoming",
+    "bot", "webhook.incoming", "applications.commands"
 ]
 
 
