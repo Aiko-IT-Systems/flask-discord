@@ -155,13 +155,17 @@ class User(DiscordModelsBase):
         """A class method which returns an instance of this model by implicitly making an
         API call to Discord. The user returned from API will always be cached and update in internal cache.
 
-        Parameters ---------- guilds : bool A boolean indicating if user's guilds should be cached or not. Defaults
-        to ``False``. If chose to not cache, user's guilds can always be obtained from
-        :py:func:`flask_discord.Guilds.fetch_from_api()`. connections : bool A boolean indicating if user's
-        connections should be cached or not. Defaults to ``False``. If chose to not cache, user's connections can
-        always be obtained from :py:func:`flask_discord.Connections.fetch_from_api()`. members : bool A boolean
-        indicating if user's guild members should be cached or not. Defaults to ``False``. If chose to not cache,
-        user's guild members can always be obtained from :py:func:`flask_discord.GuildMember.fetch_from_api(guild_id)`.
+        Parameters
+        ----------
+        guilds : bool
+            A boolean indicating if user's guilds should be cached or not. Defaults to ``False``. If chose to not
+            cache, user's guilds can always be obtained from :py:func:`flask_discord.Guilds.fetch_from_api()`.
+        connections : bool
+            A boolean indicating if user's connections should be cached or not. Defaults to ``False``. If chose to not
+            cache, user's connections can always be obtained from :py:func:`flask_discord.Connections.fetch_from_api()`.
+        members : bool
+            A boolean indicating if user's guild members should be cached or not. Defaults to ``False``. If chose to not
+            cache, user's guild member objects can always be obtained from :py:func:`flask_discord.GuildMember.fetch_from_api()`.
 
         Returns
         -------
