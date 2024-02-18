@@ -52,7 +52,6 @@ class GuildMember(DiscordModelsBase):
 
     def __init__(self, payload, guild_id):
         super().__init__(payload, guild_id=guild_id)
-        self.id = int(self._payload["id"])
         self.user = self._payload.get("user")
         self.nick = self._payload.get("nick", None)
         self.avatar_hash = self._payload.get("avatar", None)
