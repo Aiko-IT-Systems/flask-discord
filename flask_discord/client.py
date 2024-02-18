@@ -242,7 +242,9 @@ class DiscordOAuth2Session(_http.DiscordOAuth2HttpClient):
         """
         user = models.User.get_from_cache()
         try:
-            return user.guild_members[guild_id]
+            if user.guild_members is not None:
+                return user.guild_members[guild_id]
         except AttributeError:
             pass
+
         return models.GuildMember.fetch_from_api()
