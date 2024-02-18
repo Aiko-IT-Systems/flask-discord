@@ -65,7 +65,7 @@ class GuildMember(DiscordModelsBase):
         self.permissions = self._payload.get("permissions", 0)
         self.communication_disabled_until = self._payload.get("communication_disabled_until", None)
         self.guild_id = guild_id
-        self.id = self.user.get("id")
+        self.id = int(self.user.get("id"))
 
     @staticmethod
     def __get_permissions(permissions_value):
@@ -120,7 +120,6 @@ class GuildMember(DiscordModelsBase):
 
         """
         member = super().fetch_from_api(guild_id=guild_id)
-        current_app.logger.warning(member.to_json())
         if cache:
             user = current_app.discord.users_cache.get(current_app.discord.user_id)
             try:

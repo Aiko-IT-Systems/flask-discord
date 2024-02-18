@@ -267,9 +267,8 @@ class User(DiscordModelsBase):
             An instance of :py:class:`flask_discord.GuildMember` for given guild_id.
 
         """
-        member = GuildMember.fetch_from_api(guild_id, cache=True)
-        current_app.logger.warning(member)
-        current_app.logger.warning(member.roles)
+        member = GuildMember.fetch_from_api(guild_id, cache=False)
+        self.guild_members = member
         return member
 
     def fetch_guild_members(self) -> dict[int, GuildMember]:
@@ -283,7 +282,7 @@ class User(DiscordModelsBase):
 
         """
         for guild in self.guilds:
-            self.guild_members = GuildMember.fetch_from_api(guild.id, cache=True)
+            self.guild_members = GuildMember.fetch_from_api(guild.id, cache=False)
         return self.guild_members
 
 

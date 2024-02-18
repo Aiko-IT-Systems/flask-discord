@@ -48,15 +48,19 @@ class DiscordModelsBase(metaclass=DiscordModelsMeta):
             List of instances of this model when many of these models exist.
 
         """
+        route = cls.ROUTE
+
+        if guild_id != 0:
+            route = cls.ROUTE.replace("{guild_id}", str(guild_id))
+
         request_method = cls._bot_request if cls.BOT else cls._request
-        payload = request_method(cls.ROUTE)
+        payload = request_method(route)
 
         if guild_id == 0:
             if cls.MANY:
                 return [cls(_) for _ in payload]
             return cls(payload)
         else:
-            current_app.logger.warning(payload)
             return cls(payload, guild_id)
 
     def to_json(self):
