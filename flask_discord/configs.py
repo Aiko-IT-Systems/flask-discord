@@ -26,7 +26,6 @@ DISCORD_ANIMATED_IMAGE_FORMAT = "gif"
 DISCORD_USER_AVATAR_BASE_URL = DISCORD_IMAGE_BASE_URL + "avatars/{user_id}/{avatar_hash}.{format}"
 DISCORD_DEFAULT_USER_AVATAR_BASE_URL = DISCORD_EMBED_BASE_BASE_URL + "embed/avatars/{modulo5}.png"
 DISCORD_GUILD_ICON_BASE_URL = DISCORD_IMAGE_BASE_URL + "icons/{guild_id}/{icon_hash}.png"
-DISCORD_GUILD_MEMBER_AVATAR_BASE_URL = DISCORD_IMAGE_BASE_URL + ("guilds/{guild_id}/users/{user_id}/avatars/{"
-                                                                 "avatar_hash}.{format}")
+DISCORD_GUILD_MEMBER_AVATAR_BASE_URL = DISCORD_IMAGE_BASE_URL + "guilds/{guild_id}/users/{user_id}/avatars/{avatar_hash}.{format}"
 
 DISCORD_USERS_CACHE_DEFAULT_MAX_LIMIT = 100
