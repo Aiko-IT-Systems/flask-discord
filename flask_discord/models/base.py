@@ -52,7 +52,10 @@ class DiscordModelsBase(metaclass=DiscordModelsMeta):
         payload = request_method(cls.ROUTE)
         if cls.MANY:
             return [cls(_) for _ in payload]
-        return cls(payload, guild_id)
+        if not guild_id:
+            return cls(payload)
+        else:
+            return cls(payload, guild_id)
 
     def to_json(self):
         """A utility method which returns raw payload object as it was received from discord.
