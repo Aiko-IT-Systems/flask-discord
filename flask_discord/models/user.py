@@ -78,7 +78,7 @@ class User(DiscordModelsBase):
 
         # Few properties which are intended to be cached.
         self._guilds = None         # Mapping of guild ID to flask_discord.models.Guild(...).
-        self._guild_members = None  # Mapping of guild ID to flask_discord.models.GuildMember(...).
+        self._guild_members: dict[int, GuildMember] = dict()  # Mapping of guild ID to flask_discord.models.GuildMember(...).
         self.connections = None     # List of flask_discord.models.UserConnection(...).
 
     @property
@@ -98,16 +98,14 @@ class User(DiscordModelsBase):
 
     @property
     def guild_members(self):
-        """A property returning list of :py:class:`flask_discord.GuildMember` instances of the user."""
+        """A property returning dict of :py:class:`flask_discord.GuildMember` instances of the user."""
         try:
-            return list(self._guild_members.values())
+            return self._guild_members
         except AttributeError:
             pass
 
     @guild_members.setter
     def guild_members(self, value):
-        if self._guild_members is None:
-            self._guild_members = dict()
         self._guild_members[value.guild_id] = value
 
     def __str__(self):
@@ -269,10 +267,10 @@ class User(DiscordModelsBase):
             An instance of :py:class:`flask_discord.GuildMember` for given guild_id.
 
         """
-        self.guild_members = GuildMember.fetch_from_api(guild_id, cache=False)
+        self.guild_members = GuildMember.fetch_from_api(guild_id, cache=True)
         return self.guild_members[guild_id]
 
-    def fetch_guild_members(self) -> list:
+    def fetch_guild_members(self) -> dict[int, GuildMember]
         """A method which makes an API call to Discord to get user's guild members. It prepares the internal guild
         members cache and returns list of all guild member object for all guilds the user is member of.
 
@@ -283,7 +281,7 @@ class User(DiscordModelsBase):
 
         """
         for guild in self.guilds:
-            self.guild_members = GuildMember.fetch_from_api(guild.id, cache=False)
+            self.guild_members = GuildMember.fetch_from_api(guild.id, cache=True)
         return self.guild_members
 
 
