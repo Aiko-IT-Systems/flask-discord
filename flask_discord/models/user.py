@@ -106,6 +106,8 @@ class User(DiscordModelsBase):
 
     @guild_members.setter
     def guild_members(self, value):
+        if self._guild_members is None:
+            self._guild_members = dict()
         self._guild_members[value.guild_id] = value
 
     def __str__(self):
