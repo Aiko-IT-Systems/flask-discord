@@ -119,10 +119,11 @@ class GuildMember(DiscordModelsBase):
             List of instances of :py:class:`flask_discord.GuildMember` to which this user belongs.
 
         """
-        member = super().fetch_from_api()
-        user = current_app.discord.users_cache.get(current_app.discord.user_id)
-        try:
-            user.guild_members = member
-        except AttributeError:
-            pass
+        member = super().fetch_from_api(guild_id=guild_id)
+        if cache:
+            user = current_app.discord.users_cache.get(current_app.discord.user_id)
+            try:
+                user.guild_members = member
+            except AttributeError:
+                pass
         return member
