@@ -51,7 +51,7 @@ class DiscordModelsBase(metaclass=DiscordModelsMeta):
         request_method = cls._bot_request if cls.BOT else cls._request
         payload = request_method(cls.ROUTE)
 
-        if guild_id is 0:
+        if guild_id == 0:
             if cls.MANY:
                 return [cls(_) for _ in payload]
             return cls(payload)
