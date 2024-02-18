@@ -267,8 +267,10 @@ class User(DiscordModelsBase):
             An instance of :py:class:`flask_discord.GuildMember` for given guild_id.
 
         """
-        self.guild_members = GuildMember.fetch_from_api(guild_id, cache=True)
-        return self.guild_members[guild_id]
+        member = GuildMember.fetch_from_api(guild_id, cache=True)
+        current_app.logger.warning(member)
+        current_app.logger.warning(member.roles)
+        return member
 
     def fetch_guild_members(self) -> dict[int, GuildMember]:
         """A method which makes an API call to Discord to get user's guild members. It prepares the internal guild
