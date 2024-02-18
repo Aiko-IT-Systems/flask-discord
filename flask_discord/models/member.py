@@ -119,6 +119,7 @@ class GuildMember(DiscordModelsBase):
 
         """
         member = super().fetch_from_api(guild_id=guild_id)
+        current_app.logger.warning(member.to_json())
         if cache:
             user = current_app.discord.users_cache.get(current_app.discord.user_id)
             try:
